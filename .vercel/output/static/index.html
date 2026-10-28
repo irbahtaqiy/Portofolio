@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Muhammad Irbah Taqiy, UI/UX Designer</title>
+    <meta name="description" content="Muhammad Irbah Taqiy, UI/UX Designer. Crafting intuitive and visually engaging digital experiences from Jakarta." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@400;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/assets/index-BtGuPH4I.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BrXwpkgJ.css">
+  </head>
+  <body class="opening intro">
+
+    <!-- The loader: a model training, as the room loads -->
+    <div class="loader" id="loader" role="status" aria-label="Loading the room">
+      <div class="boot" aria-hidden="true">
+        <p class="boot-head"><span>$</span> python train.py --model <b>irbah-1</b> --data ./room</p>
+        <div class="train-chart">
+          <svg viewBox="0 0 300 90" preserveAspectRatio="xMinYMid meet">
+            <polyline id="train-loss" points=""></polyline>
+            <circle id="train-dot" r="2.5" cx="0" cy="8"></circle>
+          </svg>
+          <p class="train-axis"><span>loss</span><span id="train-now">2.590</span></p>
+        </div>
+        <ol class="boot-log" id="boot-log"></ol>
+        <p class="train-live" id="train-live">step 0/6000 &middot; 0.0k tok/s &middot; gpu 0%</p>
+        <div class="loader-status">
+          <p class="kicker"><span id="loader-msg">Booting</span><span id="loader-pct">0%</span></p>
+          <div class="loader-bar"><i id="loader-fill"></i></div>
+        </div>
+      </div>
+      <div class="enter" id="enter" hidden>
+        <button type="button" data-sound="on">Enter with sound</button>
+        <button type="button" data-sound="off">Enter without</button>
+      </div>
+    </div>
+
+    <!-- Custom cursor -->
+    <div class="cursor" id="cursor" aria-hidden="true">
+      <i class="cursor-dot"></i>
+      <span class="cursor-ring"></span>
+      <span class="cursor-label" id="cursor-label"></span>
+    </div>
+
+    <main id="main">
+      <canvas id="scene" role="img" aria-label="Irbah's desk, a 3D room: drag to look around, and open each part from the Sections menu or by its marker"></canvas>
+
+      <!-- Drag hint -->
+      <div class="drag-hint" id="drag-hint" aria-hidden="true">
+        <div class="drag-hint-icon">
+          <svg class="drag-hint-arrow" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"></path></svg>
+          <svg class="drag-hint-hand" viewBox="0 0 24 24"><path d="M9 12V5a1.5 1.5 0 0 1 3 0v5.5M12 10V8.5a1.5 1.5 0 0 1 3 0V11M15 10.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.6a6 6 0 0 1-4.9-2.5l-2.8-4a1.6 1.6 0 0 1 2.5-2L9 14.5"></path></svg>
+          <svg class="drag-hint-mouse" viewBox="0 0 24 24"><path class="held" d="M12 3.6a5.4 5.4 0 0 0-5.4 5.4h5.4z"></path><rect x="6" y="3" width="12" height="18" rx="6"></rect><path d="M6 9h12M12 3v6"></path></svg>
+          <svg class="drag-hint-arrow" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"></path></svg>
+        </div>
+        <p>Drag to look around</p>
+      </div>
+
+      <!-- Hero: name + tagline + meta — starts as intro, settles into sig corner -->
+      <header class="ui sig" id="hero-header">
+        <h1 class="hero-name" aria-label="Muhammad Irbah Taqiy">
+          <span class="w" aria-hidden="true"><span class="c">M</span><span class="c">u</span><span class="c">h</span><span class="c">a</span><span class="c">m</span><span class="c">m</span><span class="c">a</span><span class="c">d</span></span>
+          <span class="w" aria-hidden="true"><span class="c">I</span><span class="c">r</span><span class="c">b</span><span class="c">a</span><span class="c">h</span></span>
+          <span class="w" aria-hidden="true"><span class="c">T</span><span class="c">a</span><span class="c">q</span><span class="c">i</span><span class="c">y</span></span>
+        </h1>
+        <p class="hero-line">1% Better Every Day<i class="hero-caret" aria-hidden="true"></i></p>
+        <p class="hero-meta"><i aria-hidden="true"></i>UI/UX Designer <span>·</span> Jakarta, Indonesia</p>
+      </header>
+
+      <!-- Inline script to trigger intro animation immediately (same approach as original) -->
+      <script>
+        if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          document.currentScript.previousElementSibling.classList.replace("sig", "intro");
+          document.currentScript.previousElementSibling.classList.add("opening");
+        }
+      </script>
+
+      <!-- Undock button -->
+      <button class="undock" id="undock" type="button" hidden><span aria-hidden="true">&#9664;</span> Back to the room</button>
+
+      <!-- Index dock: glass pill with numbered sections and sliding pink indicator -->
+      <nav class="index" id="index-nav" aria-label="Sections">
+        <span class="ind" id="dock-ind" aria-hidden="true"></span>
+        <button type="button" data-go="projects"><span class="n">01</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v11H3zM9 20h6M12 16v4"></path></svg><span class="l">Projects</span></button>
+        <button type="button" data-go="experience"><span class="n">02</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v14H3z"></path><path d="M7 8h4v5H7zM13 8h4M13 11h4M13 14h3"></path></svg><span class="l">Experience</span></button>
+        <button type="button" data-go="about"><span class="n">03</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path><path d="M8 9.5h8M8 12.5h5"></path></svg><span class="l">About</span></button>
+        <button type="button" data-go="contact"><span class="n">04</span><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2"></path></svg><span class="l">Contact</span></button>
+      </nav>
+
+      <!-- Sound equalizer toggle -->
+      <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound"><i></i><i></i><i></i><i></i></button>
+
+      <!-- ═══════════════════════════════════════════════
+           [01] PROJECTS — tiling window manager (Linux desktop)
+           ═══════════════════════════════════════════════ -->
+      <section class="surface desk sheet" id="projects" aria-label="Projects" hidden>
+        <h2 class="kicker">Projects</h2>
+        <div class="dbar">
+          <nav class="ws" id="ws-nav" aria-label="Projects">
+            <button type="button" data-p="" aria-pressed="true">0 <b>all</b></button>
+            <button type="button" data-p="pos-cashier" aria-pressed="false">1 <b>pos-cashier</b></button>
+            <button type="button" data-p="student-portfolio" aria-pressed="false">2 <b>student-portfolio</b></button>
+          </nav>
+          <span class="clock" id="dbar-clock"></span>
+          <span class="tray" aria-hidden="true">
+            <svg viewBox="0 0 16 16"><path d="M1.5 6a9 9 0 0 1 13 0M4 8.6a5.4 5.4 0 0 1 8 0M6.4 11.1a2 2 0 0 1 3.2 0"></path></svg>
+            <svg viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2zM11.5 5.5a3.5 3.5 0 0 1 0 5"></path></svg>
+            <span>WIB</span>
+          </span>
+        </div>
+        <div class="dview" data-scroll>
+          <!-- All-tiles view -->
+          <div class="tiles" id="tiles-grid">
+            <!-- Project tile 1 -->
+            <button type="button" class="tile" data-p="pos-cashier" style="grid-area: edi">
+              <span class="t"><b>Website Kasir (POS)</b><span class="ctl"><i></i><i></i><i></i></span></span>
+              <div style="background:linear-gradient(135deg,#181d30 0%,#0d101c 100%);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-bottom:1px solid #ffffff14">
+                <span style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#ff9ebb;letter-spacing:-0.02em">&lt;POS /&gt;</span>
+                <span style="color:#8b849e;font-size:10px;font-family:'Space Mono',monospace;margin-top:6px">Figma · Tailwind · Laravel</span>
+              </div>
+              <span class="meta"><span class="nm">Website Kasir</span><span class="pitch">Point of Sale (POS) Cashier Website untuk UMKM.</span></span>
+            </button>
+
+            <!-- Project tile 2 -->
+            <button type="button" class="tile" data-p="student-portfolio" style="grid-area: resume">
+              <span class="t"><b>Website Portofolio Siswa</b><span class="ctl"><i></i><i></i><i></i></span></span>
+              <div style="background:linear-gradient(135deg,#241a2e 0%,#100b17 100%);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-bottom:1px solid #ffffff14">
+                <span style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#ff9ebb;letter-spacing:-0.02em">&lt;Portfolio /&gt;</span>
+                <span style="color:#8b849e;font-size:10px;font-family:'Space Mono',monospace;margin-top:6px">Figma · HTML5 · CSS3 · JS</span>
+              </div>
+              <span class="meta"><span class="nm">Portofolio Siswa</span><span class="pitch">Showcase interaktif prinsip UI/UX &amp; web modern.</span></span>
+            </button>
+
+            <!-- Terminal neofetch tile -->
+            <div class="tile term" style="grid-area: fetch" aria-hidden="true">
+              <span class="t"><b>terminal</b>&nbsp;· ~<span class="ctl"><i></i><i></i><i></i></span></span>
+              <span class="sh">
+                <span class="ln"><span class="ps">irbah@desk <em>~</em> $</span> fetch</span>
+                <span class="fetch">
+                  <span class="tvface"></span>
+                  <span>
+                    <span class="ln"><span class="k">irbah</span><span class="c">@</span><span class="k">desk</span></span>
+                    <span class="ln"><span class="k">role</span> UI/UX Designer</span>
+                    <span class="ln"><span class="k">location</span> Jakarta, Indonesia</span>
+                    <span class="ln"><span class="k">motto</span> 1% Better Every Day</span>
+                    <span class="ln"><span class="k">school</span> SMKN 71 Jakarta (RPL)</span>
+                    <span class="ln"><span class="k">stack</span> Figma, Tailwind Css, React, Html, Css, Laravel, Nuxt, Java</span>
+                    <span class="ln"><span class="k">projects</span> Website Kasir &amp; Portofolio Siswa</span>
+                    <span class="swatch"><i></i><i></i><i></i><i></i><i></i></span>
+                  </span>
+                </span>
+                <span class="ln"><span class="ps">irbah@desk <em>~</em> $</span> <span class="caret"></span></span>
+              </span>
+            </div>
+
+            <!-- Skills terminal tile -->
+            <div class="tile term" style="grid-area: mentora" aria-hidden="true">
+              <span class="t"><b>terminal</b>&nbsp;· ~/stack<span class="ctl"><i></i><i></i><i></i></span></span>
+              <span class="sh">
+                <span class="ln"><span class="ps">irbah@desk <em>~/stack</em> $</span> cat tech-stack.txt</span>
+                <span class="ln"><span class="k">design</span>    Figma (Wireframing, High-Fidelity, Prototyping)</span>
+                <span class="ln"><span class="k">frontend</span>  Tailwind Css, React, Html, Css, Nuxt</span>
+                <span class="ln"><span class="k">backend</span>   Laravel, Java</span>
+                <span class="ln"><span class="k">github</span>    github.com/irbahtaqiy</span>
+                <span class="ln"><span class="k">status</span>    Open for UI/UX opportunities</span>
+                <span class="ln"><span class="ps">irbah@desk <em>~/stack</em> $</span> <span class="caret"></span></span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Case 1: POS Cashier -->
+          <article class="case" id="case-pos-cashier" hidden>
+            <div class="win app">
+              <div class="t"><b>Website Kasir</b><span class="btns"><button type="button" data-back aria-label="Minimise, back to all projects">&#8722;</button><button type="button" tabindex="-1" aria-hidden="true">&#9633;</button><button type="button" data-back class="x" aria-label="Close, back to all projects">&#215;</button></span></div>
+              <div class="appbody">
+                <h3>Point of Sale (POS) Cashier Website</h3>
+                <p class="tagline">Speed up checkout, eliminate calculation errors, and automate real-time inventory for MSMEs.</p>
+                <figure>
+                  <div style="background:#08080c;border-radius:4px;flex:1;display:flex;align-items:center;justify-content:center;min-height:0">
+                    <div style="text-align:center;padding:32px">
+                      <div style="font-family:'Space Mono',monospace;font-size:36px;color:#ff9ebb;font-weight:700;line-height:1">&lt;POS /&gt;</div>
+                      <div style="color:#8b849e;font-size:12px;margin-top:12px;font-family:'Space Mono',monospace">Point of Sale · Website Kasir</div>
+                      <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
+                        <span style="background:#ff9ebb22;color:#ff9ebb;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">Figma</span>
+                        <span style="background:#f0a35e22;color:#f0a35e;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">Tailwind</span>
+                        <span style="background:#8fd3c122;color:#8fd3c1;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">Laravel</span>
+                      </div>
+                    </div>
+                  </div>
+                  <figcaption>Point of Sale (POS) Cashier Website designed in Figma from wireframe to interactive prototyping with role-based auth, inventory, and receipt printing.</figcaption>
+                </figure>
+              </div>
+            </div>
+            <div class="win term">
+              <div class="t"><b>terminal</b>&nbsp;· ~/projects/pos-cashier<span class="btns"><button type="button" data-back aria-label="Minimise">&#8722;</button><button type="button" tabindex="-1" aria-hidden="true">&#9633;</button><button type="button" data-back class="x">&#215;</button></span></div>
+              <div class="readme" data-scroll>
+                <p class="cmd"><em>~/projects/pos-cashier</em> $ glow README.md</p>
+                <h4>Why It Was Built (Background &amp; Objectives)</h4>
+                <p>This Cashier Website was designed to address manual transaction challenges faced by MSMEs and small retail businesses. The goals of this project are to:</p>
+                <ul>
+                  <li>Speed up the checkout transaction process.</li>
+                  <li>Minimize human errors in total bill and change calculations.</li>
+                  <li>Automate inventory tracking and daily transaction logging in real-time.</li>
+                </ul>
+                <h4>Key Features</h4>
+                <ul>
+                  <li><b>Authentication &amp; Role Management:</b> Distinct access rights and login screens for cashiers and administrators.</li>
+                  <li><b>Point of Sale (POS) Interface:</b> Fast product search, quantity input, and automated total and change calculation.</li>
+                  <li><b>Inventory Management (CRUD):</b> Ability to add, edit, and delete product details, prices, and stock counts.</li>
+                  <li><b>Transaction History &amp; Receipt Generation:</b> Transaction record logging with options to print digital or physical receipts.</li>
+                  <li><b>Responsive Layout:</b> Optimized interface for laptops, tablets, and touchscreen POS terminals.</li>
+                </ul>
+                <h4>Tech Stack</h4>
+                <ul>
+                  <li><b>UI/UX Design:</b> Figma (Wireframing, High-Fidelity Design, Interactive Prototyping)</li>
+                  <li><b>Frontend:</b> HTML5, CSS3, JavaScript, Tailwind CSS / Bootstrap</li>
+                  <li><b>Backend &amp; Database:</b> Node.js / PHP / Laravel &amp; MySQL</li>
+                </ul>
+                <h4>Architectural &amp; Design Decisions</h4>
+                <ul>
+                  <li><b>Efficiency-First UI:</b> Designed large touch and click targets for numbers and products to speed up cashier navigation without relying heavily on a mouse.</li>
+                  <li><b>Minimal Steps to Checkout:</b> Streamlined the flow from product selection to receipt printing to ensure transactions complete in under 10 seconds.</li>
+                  <li><b>Design System &amp; Reusable Components:</b> Applied Atomic Design principles in Figma for buttons, product cards, and data tables to maintain visual consistency and facilitate developer handoff.</li>
+                </ul>
+                <p class="deps">"<b>techStack</b>": [<em>"Figma"</em>, <em>"Tailwind CSS"</em>, <em>"Bootstrap"</em>, <em>"HTML5/CSS3"</em>, <em>"JavaScript"</em>, <em>"Laravel"</em>, <em>"MySQL"</em>]</p>
+                <p class="gh"><a href="https://github.com/irbahtaqiy" target="_blank" rel="noopener">GitHub: github.com/irbahtaqiy</a></p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Case 2: Student Portfolio -->
+          <article class="case" id="case-student-portfolio" hidden>
+            <div class="win app">
+              <div class="t"><b>Website Portofolio Siswa</b><span class="btns"><button type="button" data-back aria-label="Minimise">&#8722;</button><button type="button" tabindex="-1" aria-hidden="true">&#9633;</button><button type="button" data-back class="x">&#215;</button></span></div>
+              <div class="appbody">
+                <h3>Student Portfolio Website</h3>
+                <p class="tagline">Interactive professional showcase demonstrating practical UI/UX principles and modern web development standards.</p>
+                <figure>
+                  <div style="background:#08080c;border-radius:4px;flex:1;display:flex;align-items:center;justify-content:center;min-height:0">
+                    <div style="text-align:center;padding:32px">
+                      <div style="font-family:'Space Mono',monospace;font-size:36px;color:#ff9ebb;font-weight:700;line-height:1">&lt;Portfolio/&gt;</div>
+                      <div style="color:#8b849e;font-size:12px;margin-top:12px;font-family:'Space Mono',monospace">Portofolio Siswa · UI/UX Design</div>
+                      <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
+                        <span style="background:#ff9ebb22;color:#ff9ebb;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">Figma</span>
+                        <span style="background:#f0a35e22;color:#f0a35e;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">HTML5</span>
+                        <span style="background:#8fd3c122;color:#8fd3c1;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">CSS3</span>
+                        <span style="background:#ff9ebb22;color:#ff9ebb;padding:4px 10px;border-radius:4px;font-size:10px;font-family:'Space Mono',monospace">Tailwind</span>
+                      </div>
+                    </div>
+                  </div>
+                  <figcaption>Fully responsive personal portfolio with interactive hero, project case studies, and modern UI/UX principles.</figcaption>
+                </figure>
+              </div>
+            </div>
+            <div class="win term">
+              <div class="t"><b>terminal</b>&nbsp;· ~/projects/student-portfolio<span class="btns"><button type="button" data-back>&#8722;</button><button type="button" tabindex="-1" aria-hidden="true">&#9633;</button><button type="button" data-back class="x">&#215;</button></span></div>
+              <div class="readme" data-scroll>
+                <p class="cmd"><em>~/projects/student-portfolio</em> $ glow README.md</p>
+                <h4>Why It Was Built (Background &amp; Objectives)</h4>
+                <p>This website serves as an interactive professional showcase for a Software Engineering student to:</p>
+                <ul>
+                  <li>Display personal identity, technical skills, and key projects completed during school.</li>
+                  <li>Provide a direct channel for potential recruiters or clients to make contact.</li>
+                  <li>Demonstrate practical knowledge of modern UI/UX principles and web development standards.</li>
+                </ul>
+                <h4>Key Features</h4>
+                <ul>
+                  <li><b>Interactive Hero &amp; About Section:</b> Engaging introduction with clear Call-to-Action buttons such as "View Projects" and "Contact Me".</li>
+                  <li><b>Project Showcase &amp; Technical Case Studies:</b> Project gallery with category filters alongside detailed technical explanations.</li>
+                  <li><b>Skills &amp; Tech Stack Display:</b> Visual representation of mastered tools and programming languages.</li>
+                  <li><b>Contact Form &amp; Social Links:</b> Interactive form for direct messaging alongside links to professional profiles.</li>
+                  <li><b>Dark / Light Mode Toggle:</b> Theme switcher for enhanced user viewing comfort.</li>
+                </ul>
+                <h4>Tech Stack</h4>
+                <ul>
+                  <li><b>UI/UX Design:</b> Figma (Design System, Responsive Grid System, Micro-interactions)</li>
+                  <li><b>Frontend:</b> HTML5, CSS3 (Custom CSS / Tailwind CSS), JavaScript ES6+</li>
+                </ul>
+                <h4>Architectural &amp; Design Decisions</h4>
+                <ul>
+                  <li><b>Mobile-First &amp; Fully Responsive:</b> Designed for smaller screen sizes first to ensure all content is readable and accessible without sacrificing performance on mobile devices.</li>
+                  <li><b>Content Hierarchy &amp; Scannability:</b> Utilized clear typography scales and a clean layout so recruiters can grasp key information within the first 5 seconds.</li>
+                  <li><b>Performance Optimization:</b> Optimized assets using modern image formats (WebP/SVG) and minimized external libraries to ensure fast load times even on slower networks.</li>
+                </ul>
+                <p class="deps">"<b>techStack</b>": [<em>"Figma"</em>, <em>"HTML5"</em>, <em>"CSS3"</em>, <em>"Tailwind CSS"</em>, <em>"JavaScript ES6+"</em>]</p>
+                <p class="gh"><a href="https://github.com/irbahtaqiy" target="_blank" rel="noopener">GitHub: github.com/irbahtaqiy</a></p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+           [02] EXPERIENCE — cork pinboard (exact structure from original)
+           ═══════════════════════════════════════════════ -->
+      <section class="surface board sheet" id="experience" aria-label="Experience" hidden>
+        <div class="board-head">
+          <h2 class="kicker">Experience</h2>
+          <a class="cv" href="mailto:irbahtaqiy@gmail.com?subject=Resume%20Inquiry">Download CV</a>
+        </div>
+        <div class="notes">
+          <article class="note">
+            <span class="pin"></span>
+            <h3>SMKN 71 Jakarta</h3>
+            <p class="role">Software Engineering Student (RPL)</p>
+            <p class="when">2025 - Now</p>
+            <ul>
+              <li><span class="ln">Majoring in Software Engineering (Rekayasa Perangkat Lunak / RPL).</span></li>
+              <li><span class="ln">Discovered deep passion for UI/UX Design — bridges aesthetics and code.</span></li>
+              <li><span class="ln">Designs with full understanding of how code works under the hood.</span></li>
+            </ul>
+          </article>
+          <article class="note">
+            <span class="pin"></span>
+            <h3>SMPN 270 Jakarta</h3>
+            <p class="role">Junior High School</p>
+            <p class="when">2022 - 2025</p>
+            <ul>
+              <li><span class="ln">Completed secondary education with active digital learning participation.</span></li>
+              <li><span class="ln">Developed early curiosity in technology, web aesthetics, and creative digital media.</span></li>
+            </ul>
+          </article>
+          <article class="note">
+            <span class="pin"></span>
+            <h3>SDN Rawaterate 01</h3>
+            <p class="role">Primary School</p>
+            <p class="when">2016 - 2022</p>
+            <ul>
+              <li><span class="ln">Graduated primary school with early passion for technology and visual arts.</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+           [03] ABOUT — pink retro TV with AI chatbot (exact structure from original)
+           ═══════════════════════════════════════════════ -->
+      <section class="surface tv sheet" id="about" aria-label="About Irbah" hidden>
+        <h2 class="kicker">About</h2>
+        <div class="eyes" aria-hidden="true"><span></span><span></span></div>
+        <div class="tabs" role="tablist" aria-label="About Irbah">
+          <button type="button" role="tab" id="tab-chat" aria-selected="true" aria-controls="tv-chat">Chat</button>
+          <button type="button" role="tab" id="tab-bio" aria-selected="false" aria-controls="tv-bio" tabindex="-1">About</button>
+        </div>
+        <div class="pane" id="tv-chat" role="tabpanel" aria-labelledby="tab-chat">
+          <div class="log" id="chat-log" aria-live="polite" data-scroll>
+            <p class="msg him">Hey! I'm Irbah's AI assistant. Ask me anything about his UI/UX design work, tech stack, or story!</p>
+          </div>
+          <form class="ask" id="ask">
+            <input id="ask-q" name="q" maxlength="200" autocomplete="off" placeholder="Type a message" aria-label="Ask a question about Irbah" />
+            <button type="submit">Send</button>
+          </form>
+        </div>
+        <div class="pane bio" id="tv-bio" role="tabpanel" aria-labelledby="tab-bio" data-scroll hidden>
+          <p class="lead">Hi! I’m a passionate UI/UX Designer dedicated to crafting intuitive and visually engaging digital experiences. I bridge the gap between aesthetics and functionality to create interfaces that feel smooth, natural, and enjoyable for users.</p>
+          
+          <h4 style="color:#ff9ebb;font-size:0.9em;margin-top:1em;font-weight:700">How It All Started</h4>
+          <p>My journey into the tech world officially kicked off when I chose to major in Software Engineering (RPL / Rekayasa Perangkat Lunak) in vocational high school. That was my very first introduction to the world of code, logic, and building digital products from scratch.</p>
+          
+          <h4 style="color:#ff9ebb;font-size:0.9em;margin-top:1em;font-weight:700">Discovering My Passion for Design</h4>
+          <p>While working on various school assignments and building web projects using HTML and CSS, I noticed something interesting. I enjoyed the coding part, but what really got me excited was shaping how the website looked and how users interacted with it. I found myself spending hours perfecting layouts, choosing colors, and tweaking element alignments to make sure everything felt right.</p>
+          
+          <p>That realization led me straight into UI/UX Design. Having a background in RPL gave me a huge advantage—I don't just design pretty interfaces; I design with a clear understanding of how code works under the hood.</p>
+          
+          <h4 style="color:#ff9ebb;font-size:0.9em;margin-top:1em;font-weight:700">My Design Journey</h4>
+          <p>My journey into design actually started unexpectedly during school assignments where I first played around with HTML and CSS. Building those early web projects sparked my curiosity—I realized how much I enjoyed shaping how things look and feel on a screen.</p>
+          <p>Over time, that curiosity evolved into a deep passion for UI/UX design. Today, I focus on understanding user needs and turning ideas into clean, functional, and visually compelling designs. I’m constantly learning, experimenting, and growing as a designer with every new challenge.</p>
+          
+          <div style="margin-top:1.2em;padding:0.9em;background:#1b1f33;border-radius:8px;border:1px solid #ffffff12">
+            <span style="font-family:'Space Mono',monospace;font-size:0.7em;color:#ff9ebb;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:0.4em">Tech Stack Utama</span>
+            <p style="font-family:'Space Mono',monospace;font-size:0.75em;color:#f4e7e2;margin:0">Figma, Tailwind Css, React, Html, Css, Laravel, Nuxt, Java</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+           [04] CONTACT — smartphone mockup (exact structure from original)
+           ═══════════════════════════════════════════════ -->
+      <section class="surface phone sheet" id="contact" aria-label="Contact" hidden>
+        <h2 class="kicker">Contact</h2>
+        <div class="pstatus" aria-hidden="true">
+          <span id="phone-time-top"></span>
+          <span class="punch"></span>
+          <span class="picons">
+            <svg viewBox="0 0 16 16"><path d="M2 13h1.5v-2H2zM6 13h1.5V8H6zM10 13h1.5V5H10z"></path></svg>
+            <svg viewBox="0 0 16 16"><path d="M1.5 6a9 9 0 0 1 13 0M4 8.6a5.4 5.4 0 0 1 8 0M6.4 11.1a2 2 0 0 1 3.2 0"></path></svg>
+            <svg viewBox="0 0 16 16"><path d="M1.5 5h11v6h-11zM14 7v2"></path><path d="M3 6.5h6v3H3z" fill="currentColor" stroke="none"></path></svg>
+          </span>
+        </div>
+        <p class="pclock" aria-hidden="true" id="phone-clock-big"></p>
+        <p class="pdate" aria-hidden="true"><i></i><span id="phone-date-str"></span> · Jakarta</p>
+        <div class="pwho">
+          <h3>Muhammad Irbah Taqiy</h3>
+          <p>UI/UX Designer in Jakarta, Indonesia</p>
+        </div>
+        <div class="pgrid">
+          <a class="pw wide" href="mailto:irbahtaqiy@gmail.com">
+            <span class="top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z"></path><path d="M3 7l9 6 9-6"></path></svg><span class="glyph"></span></span>
+            <span><span class="k">email</span><span class="v">irbahtaqiy@gmail.com</span></span>
+          </a>
+          <a class="pw" href="https://github.com/irbahtaqiy" target="_blank" rel="noopener">
+            <span class="top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1.4-4-2-6-2.5M15 21v-3.4a3 3 0 0 0-.8-2.3c2.8-.3 5.8-1.4 5.8-6.2a4.8 4.8 0 0 0-1.3-3.3 4.5 4.5 0 0 0-.1-3.3s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.2 5.4 2.5 5.4 2.5a4.5 4.5 0 0 0-.1 3.3A4.8 4.8 0 0 0 4 9.1c0 4.8 3 5.9 5.8 6.2a3 3 0 0 0-.8 2.3V21"></path></svg><span class="glyph"></span></span>
+            <span><span class="k">github</span><span class="v">github.com/irbahtaqiy</span></span>
+          </a>
+          <a class="pw" href="https://www.linkedin.com/in/muhammad-irbah-taqiy-139615405" target="_blank" rel="noopener">
+            <span class="top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3.5v11H4zM5.8 4.2a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6zM10 9h3.3v1.6c.5-.9 1.7-1.9 3.6-1.9 3.6 0 4.1 2.3 4.1 5.3V20h-3.5v-5.3c0-1.3 0-2.9-1.8-2.9s-2.1 1.4-2.1 2.8V20H10z"></path></svg><span class="glyph"></span></span>
+            <span><span class="k">linkedin</span><span class="v">www.linkedin.com/in/muhammad-irbah-taqiy-139615405</span></span>
+          </a>
+          <a class="pw wide cv" href="mailto:irbahtaqiy@gmail.com?subject=Resume%20Request%20-%20Muhammad%20Irbah%20Taqiy">
+            <span class="top"><span class="k">cv.pdf</span><span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"></path></svg></span></span>
+            <span class="v">Request Resume (PDF)</span>
+          </a>
+        </div>
+        <div class="pdock" aria-hidden="true">
+          <span><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"></path></svg></span>
+          <span><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"></path></svg></span>
+          <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M4 12h16M12 4c3 3 3 13 0 16M12 4c-3 3-3 13 0 16"></path></svg></span>
+          <span><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></span>
+        </div>
+        <span class="pgesture" aria-hidden="true"></span>
+      </section>
+    </main>
+
+  </body>
+</html>
